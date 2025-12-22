@@ -1,6 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <title>FAQ Generator</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 40px;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      color: #FF9933;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      text-align: center;
+      color: #444;
+      margin: 30px 0 15px 0;
+    }
+
+    .faq-form {
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+      background: #fff;
+      border: 2px solid #FFBB00;
+      border-radius: 12px;
+      padding: 25px 30px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    }
+
+    .faq-form label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+      color: #444;
+    }
+
+    .faq-form input,
+    .faq-form textarea {
+      width: 90%;
+      padding: 12px 14px;
+      margin-bottom: 15px;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .faq-form input:focus,
+    .faq-form textarea:focus {
+      border-color: #FF9933;
+      box-shadow: 0 0 0 3px rgba(255,153,51,0.25);
+      outline: none;
+    }
+
+    .faq-form button {
+        margin-bottom: 10px;
+      background: #FF9933;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .faq-form button:hover {
+      background: #e68a2e;
+      transform: translateY(-2px);
+    }
+
+    #output {
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+      border-radius: 8px;
+      border: 1.5px solid #ddd;
+      padding: 12px;
+      font-family: monospace;
+      background: #fdfdfd;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    #faq {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Accordion styles for preview */
+    .faq-container {
+      font-family: inherit;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      border: 1px solid rgb(255, 187, 0);
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+    }
+    .faq-question {
+      cursor: pointer;
+      padding: 20px;
+      color: #333;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+    .faq-question:hover {
+      background: #fff9f0;
+    }
+    .faq-icon {
+      font-size: 16px;
+      transition: all 0.3s ease;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #f0f0f0;
+      color: #666;
+    }
+    .faq-question.active .faq-icon {
+      background-color: #FF9933;
+      color: #fff;
+    }
+    .faq-answer {
+      margin: 0;
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 20px;
+      color: #555;
+      line-height: 1.6;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .faq-answer.open {
+      padding: 0 20px 20px 20px;
+      background: #fff;
+    }
+    
+    /* Reset button styling */
+    .reset-btn {
+      background: #f0f0f0;
+      color: #666;
+    }
+    
+    .reset-btn:hover {
+      background: #e0e0e0;
+    }
+    
+    .instructions {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 15px;
+      background: #fff8e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #5d4037;
+      text-align: center;
+    }
+    
+    .copy-btn {
+      background: #f8f8f8;
+      padding: 10px;;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+    
+    .copy-btn:hover {
+      background: #cfcfcf;
+    }
+  </style>
+</head>
+<body>
+
+  <h2><i class="fa-solid fa-question-circle"></i> FAQ Generator</h2>
+  
+  <div class="instructions">
+    <p><strong>Instructions:</strong> Add FAQ questions and answers, then generate HTML code with structured schema markup for SEO.</p>
+  </div>
+
+  <div class="faq-form">
+    <label>Question:</label>
+    <input type="text" id="question" placeholder="Enter your FAQ question...">
+    <label>Answer:</label>
+    <textarea id="answer" placeholder="Enter the answer here..." rows="4"></textarea>
+    <button id="addBtn"><i class="fa-solid fa-plus"></i> Add FAQ</button>
+    <button id="genBtn"><i class="fa-solid fa-code"></i> Generate HTML + Schema</button>
+    <button id="resetBtn" class="reset-btn"><i class="fa-solid fa-trash"></i> Reset All</button>
+  </div>
+
+  <h3>Live Preview:</h3>
+  <div id="faq"></div>
+
+  <h3>Generated Code:</h3>
+  <button id="copyBtn" class="copy-btn" style="display: none;"><i class="fa-solid fa-copy"></i> Copy to Clipboard</button>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    const faqList = [];
+
+    function addFAQ() {
+      const q = document.getElementById('question').value.trim();
+      const a = document.getElementById('answer').value.trim();
+      if (!q || !a) { 
+        alert("Please enter both question and answer"); 
+        return; 
+      }
+      faqList.push({question: q, answer: a});
+      renderFAQ();
+      document.getElementById('question').value = '';
+      document.getElementById('answer').value = '';
+      document.getElementById('question').focus();
+    }
+
+    function renderFAQ() {
+      const faqDiv = document.getElementById('faq');
+      if (faqList.length === 0) {
+        faqDiv.innerHTML = '<p style="text-align: center; color: #888;"><i class="fa-solid fa-inbox"></i> No FAQs added yet. Add your first FAQ above.</p>';
+        return;
+      }
+      
+      faqDiv.innerHTML = `
+        <div class="faq-container">
+          ${faqList.map((item, index) => `
+            <div class="faq-item" data-index="${index}">
+              <div class="faq-question">
+                <span>${item.question}</span>
+                <i class="faq-icon fa-solid fa-plus"></i>
+              </div>
+              <div class="faq-answer">${item.answer.replace(/\n/g, '<br>')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      // Attach accordion behavior with Font Awesome icons
+      faqDiv.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+          const answer = q.nextElementSibling;
+          const icon = q.querySelector('.faq-icon');
+          q.classList.toggle('active');
+          
+          if (answer.style.maxHeight) {
+            // Collapse
+            answer.style.maxHeight = null;
+            answer.classList.remove('open');
+            icon.classList.remove('fa-minus');
+            icon.classList.add('fa-plus');
+          } else {
+            // Expand
+            answer.style.maxHeight = answer.scrollHeight + "px";
+            answer.classList.add('open');
+            icon.classList.remove('fa-plus');
+            icon.classList.add('fa-minus');
+          }
+        });
+      });
+    }
+
+    function generateCode() {
+      if (faqList.length === 0) { 
+        alert("Please add at least one FAQ before generating code"); 
+        return; 
+      }
+      
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqList.map(item => ({
+          "@type": "Question",
+          "name": item.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": item.answer
+          }
+        }))
+      };
+
+      const htmlCode = `<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ Section</title>
@@ -70,32 +366,19 @@
 </head>
 <body>
     <div class="faq-container">
-        <div class="faq-item">
+${faqList.map(item => `        <div class="faq-item">
             <div class="faq-question">
-                <span>hvbmn</span>
+                <span>${item.question}</span>
                 <i class="faq-icon fa-solid fa-plus"></i>
             </div>
-            <div class="faq-answer">vhjvjh</div>
-        </div>
+            <div class="faq-answer">${item.answer.replace(/\n/g, '<br>')}</div>
+        </div>`).join('\n')}
     </div>
 
     <!-- FAQ Schema for SEO -->
     <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-            "@type": "Question",
-            "name": "hvbmn",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "vhjvjh"
-            }
-        }
-    ]
-}
-    </script>
+${JSON.stringify(schema, null, 4)}
+    <\/script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -121,6 +404,66 @@
                 });
             });
         });
-    </script>
+    <\/script>
+</body>
+</html>`;
+
+      document.getElementById('output').value = htmlCode;
+      document.getElementById('copyBtn').style.display = 'block';
+      
+      // Scroll to output
+      document.getElementById('output').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyToClipboard() {
+      const output = document.getElementById('output');
+      output.select();
+      output.setSelectionRange(0, 99999); // For mobile devices
+      
+      try {
+        navigator.clipboard.writeText(output.value).then(() => {
+          const btn = document.getElementById('copyBtn');
+          const originalHTML = btn.innerHTML;
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+          btn.style.background = '#c0ffa3';
+          
+          setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.style.background = '';
+          }, 2000);
+        });
+      } catch (err) {
+        alert('Failed to copy: ' + err);
+      }
+    }
+
+    function resetAll() {
+      if (confirm("Are you sure you want to reset all FAQs?")) {
+        faqList.length = 0;
+        document.getElementById('question').value = '';
+        document.getElementById('answer').value = '';
+        document.getElementById('output').value = '';
+        document.getElementById('copyBtn').style.display = 'none';
+        renderFAQ();
+      }
+    }
+
+    // Event Listeners
+    document.getElementById('addBtn').addEventListener('click', addFAQ);
+    document.getElementById('genBtn').addEventListener('click', generateCode);
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+    document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+    // Allow Enter key to add FAQ when in question field
+    document.getElementById('question').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        addFAQ();
+      }
+    });
+
+    // Initial render
+    renderFAQ();
+  </script>
 </body>
 </html>
