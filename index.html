@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Section</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .faq-container {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .faq-item {
+            border: 1px solid rgb(255, 187, 0);
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .faq-question {
+            cursor: pointer;
+            padding: 20px;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+        .faq-question:hover {
+            background: #fff9f0;
+        }
+        .faq-icon {
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f0f0f0;
+            color: #666;
+        }
+        .faq-question.active .faq-icon {
+            background-color: #FF9933;
+            color: #fff;
+        }
+        .faq-answer {
+            margin: 0;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 20px;
+            color: #555;
+            line-height: 1.6;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .faq-answer.open {
+            padding: 0 20px 20px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>hvbmn</span>
+                <i class="faq-icon fa-solid fa-plus"></i>
+            </div>
+            <div class="faq-answer">vhjvjh</div>
+        </div>
+    </div>
+
+    <!-- FAQ Schema for SEO -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "hvbmn",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "vhjvjh"
+            }
+        }
+    ]
+}
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.addEventListener('click', () => {
+                    const answer = q.nextElementSibling;
+                    const icon = q.querySelector('.faq-icon');
+                    q.classList.toggle('active');
+                    
+                    if (answer.style.maxHeight) {
+                        // Collapse
+                        answer.style.maxHeight = null;
+                        answer.classList.remove('open');
+                        icon.classList.remove('fa-minus');
+                        icon.classList.add('fa-plus');
+                    } else {
+                        // Expand
+                        answer.style.maxHeight = answer.scrollHeight + "px";
+                        answer.classList.add('open');
+                        icon.classList.remove('fa-plus');
+                        icon.classList.add('fa-minus');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
